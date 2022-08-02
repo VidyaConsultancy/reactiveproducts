@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './components/app/App';
+// import App from './components/app/App';
+import { Main } from './components/main/Main';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App appTitle="ReactiveProducts" />
+    {/* <App appTitle="ReactiveProducts" /> */}
+    <Main />
   </React.StrictMode>
 );
 
