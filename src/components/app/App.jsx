@@ -11,6 +11,11 @@ import { useEffect, useState } from "react";
 // useLayoutEffect
 // useReducers
 
+// useEffect
+// no deps array => always
+// empty deps array => once
+// with depdencies in deps array => once after the first render, then for subsequent updatesin the dependencies
+
 function App(props) {
   const [category, setCategory] = useState(""); // this.state = { category: '' }; this.setState({ category: 'avalue' });
   const [subCategory, setSubCategory] = useState("Initial subcat");
