@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { WithNavigate } from "../../hoc/WithNavigate";
 import { createProduct } from "../../services/products";
 import { useRouterNavigate } from "../../hooks/useRouterNavigate";
+import { useDimension } from "../../hooks/useDimension";
 
 const ProductAddComponent = (props) => {
-  console.log('props', props)
+  const dimensions = useDimension();
+  console.log('props', props, dimensions)
   const navigate = useRouterNavigate();
   const [product, setProduct] = useState({ name: "", price: "" });
 
