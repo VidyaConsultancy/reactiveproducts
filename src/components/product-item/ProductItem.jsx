@@ -1,11 +1,13 @@
-export const ProductItem = ({ product, handleDelete, handleEdit }) => (
+import { Link } from "react-router-dom";
+
+export const ProductItem = ({ product, handleDelete }) => (
   <li className="product d-flex align-center gap-3">
     <p>
       {product.name} | <small>${product.price}</small>
     </p>
-    <button className="btn btn-info btn-sm" onClick={() => handleEdit(product.id)}>
+    <Link className="btn btn-info btn-sm" to={`/products/edit/${product.id}`}>
       Edit
-    </button>
+    </Link>
     <button className="btn btn-danger btn-sm" onClick={() => handleDelete(product.id)}>
       Delete
     </button>

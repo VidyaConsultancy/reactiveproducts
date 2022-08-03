@@ -5,6 +5,11 @@
       "name": "MacBook Air",
       "price": "99.99",
       "id": 1
+    },
+    {
+      "name": "Acer",
+      "price": "99.99",
+      "id": 2
     }
   ]
 }

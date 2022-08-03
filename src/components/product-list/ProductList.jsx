@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import { ProductItem } from "../product-item/ProductItem";
 import {
   getAllProducts,
-  createProduct,
   deleteProduct,
-  modifyProduct,
-  getProductById,
 } from "../../services/products";
 import "./ProductList.css";
+import { Link } from "react-router-dom";
 
 // const axiosObj = axios.create({
 //   baseURL: "http://localhost:3000",
@@ -19,23 +17,15 @@ import "./ProductList.css";
 
 export const ProductList = () => {
   const [products, setProducts] = useState([]);
-  const [showAddProductForm, setShowAddProductForm] = useState(false);
-  const [showEditProductForm, setShowEditProductForm] = useState(false);
-  const [product, setProduct] = useState({ name: "", price: "" });
-  const [updateProduct, setUpdateProduct] = useState({
-    id: "",
-    name: "",
-    price: "",
-  });
-  const [error, setError] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   const fetchAllProducts = async () => {
     try {
       const response = await getAllProducts();
       setProducts(response);
     } catch (error) {
-      setError(error);
-      setTimeout(() => setError(null), 2000)
+      setErrorMsg(error);
+      setTimeout(() => setErrorMsg(null), 2000);
     }
   };
 
@@ -59,59 +49,11 @@ export const ProductList = () => {
     fetchAllProducts();
   }, []);
 
-  const handleChange = (e) => {
-    const updatedProduct = { ...product, [e.target.id]: e.target.value };
-    setProduct(updatedProduct);
-  };
-
-  const handleProductAdd = async (e) => {
-    e.preventDefault();
-    const newProduct = { ...product };
-    try {
-      await createProduct(newProduct);
-      await fetchAllProducts();
-      // const updatedProducts = [...products, response];
-      // setProducts(updatedProducts);
-      setProduct({ name: "", price: "" });
-    } catch (error) {
-      console.error(`Error!`, error);
-    }
-  };
-
   const onDelete = async (id) => {
     await deleteProduct(id);
     await fetchAllProducts();
     // const updatedProducts = products.filter((product) => product.id !== id);
     // setProducts(updatedProducts);
-  };
-
-  const onEdit = async (id) => {
-    const editProduct = await getProductById(id);
-    // const editProduct = products.find((product) => product.id === id);
-    setUpdateProduct(editProduct);
-    setShowEditProductForm(true);
-  };
-
-  const handleUChange = (e) => {
-    const updatedProduct = {
-      ...updateProduct,
-      [e.target.name]: e.target.value,
-    };
-    setUpdateProduct(updatedProduct);
-  };
-
-  const handleProductEdit = async (e) => {
-    e.preventDefault();
-    const newProduct = { ...updateProduct };
-    await modifyProduct(newProduct);
-    await fetchAllProducts();
-    // const productIndex = products.findIndex(
-    //   (product) => product.id === newProduct.id
-    // );
-    // products.splice(productIndex, 1, newProduct);
-    // setProducts(products);
-    setUpdateProduct({ id: "", name: "", price: "" });
-    setShowEditProductForm(false);
   };
 
   // if(loading) {
@@ -120,16 +62,18 @@ export const ProductList = () => {
 
   return (
     <div className="products-page">
-      {error ? <div className="alert alert-danger">
-        <p>{error.message}</p>
-      </div> : null}
+      {errorMsg ? (
+        <div className="alert alert-danger">
+          <p>{errorMsg.message}</p>
+        </div>
+      ) : null}
       <div>
-        <button
-          onClick={() => setShowAddProductForm(!showAddProductForm)}
+        <Link
+          to="/products/add"
           className="btn btn-warn"
         >
-          Toggle Add Product Form
-        </button>
+          Add Product
+        </Link>
       </div>
       <ul className="products d-flex flex-column gap-3">
         {products.map((product) => (
@@ -137,76 +81,9 @@ export const ProductList = () => {
             product={product}
             key={product.id}
             handleDelete={onDelete}
-            handleEdit={onEdit}
           />
         ))}
       </ul>
-      {showAddProductForm ? (
-        <form action="" className="column-form" onSubmit={handleProductAdd}>
-          <div className="form-group">
-            <label htmlFor="name">Product name</label>
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              id="name"
-              value={product.name}
-              placeholder="Enter product name"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="price">Product Price</label>
-            <input
-              type="text"
-              className="form-control"
-              name="price"
-              id="price"
-              value={product.price}
-              placeholder="Enter product price"
-              onChange={handleChange}
-            />
-          </div>
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </div>
-        </form>
-      ) : null}
-      {showEditProductForm ? (
-        <form action="" className="column-form" onSubmit={handleProductEdit}>
-          <div className="form-group">
-            <label htmlFor="uname">Product name</label>
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              id="uname"
-              value={updateProduct.name}
-              placeholder="Enter product name"
-              onChange={handleUChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="uprice">Product Price</label>
-            <input
-              type="text"
-              className="form-control"
-              name="price"
-              id="uprice"
-              value={updateProduct.price}
-              placeholder="Enter product price"
-              onChange={handleUChange}
-            />
-          </div>
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </div>
-        </form>
-      ) : null}
     </div>
   );
 };
