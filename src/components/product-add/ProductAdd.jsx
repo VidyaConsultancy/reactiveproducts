@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { WithNavigate } from "../../hoc/WithNavigate";
 import { createProduct } from "../../services/products";
+import { useRouterNavigate } from "../../hooks/useRouterNavigate";
 
-export const ProductAdd = () => {
-  const navigate = useNavigate();
+const ProductAddComponent = (props) => {
+  console.log('props', props)
+  const navigate = useRouterNavigate();
   const [product, setProduct] = useState({ name: "", price: "" });
 
   const handleChange = (e) => {
@@ -22,6 +25,7 @@ export const ProductAdd = () => {
       console.error(`Error!`, error);
     }
   };
+
   return (
     <form action="" className="column-form" onSubmit={handleProductAdd}>
       <div className="form-group">
@@ -56,3 +60,5 @@ export const ProductAdd = () => {
     </form>
   );
 }
+
+export const ProductAdd = WithNavigate(ProductAddComponent);

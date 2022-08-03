@@ -20,6 +20,11 @@
       "name": "Dell Vista",
       "price": "89.99",
       "id": 4
+    },
+    {
+      "name": "MS Surface Pro",
+      "price": "299.99",
+      "id": 5
     }
   ]
 }
