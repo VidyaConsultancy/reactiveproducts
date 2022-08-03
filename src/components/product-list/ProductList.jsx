@@ -1,55 +1,116 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+// import axios from 'axios';
 import { ProductItem } from "../product-item/ProductItem";
+import {
+  getAllProducts,
+  createProduct,
+  deleteProduct,
+  modifyProduct,
+  getProductById,
+} from "../../services/products";
 import "./ProductList.css";
 
+// const axiosObj = axios.create({
+//   baseURL: "http://localhost:3000",
+//   headers: {
+//     authoriazation: "Bearer token",
+//   },
+// });
+
 export const ProductList = () => {
-  const [products, setProducts] = useState([
-    { id: 1, name: "Acer", price: 99.99 },
-    { id: 2, name: "MacBook", price: 199.99 },
-    { id: 3, name: "HP Pavilion", price: 149.99 },
-    { id: 4, name: "MS SurfaceProd", price: 249.99 },
-  ]);
+  const [products, setProducts] = useState([]);
   const [showAddProductForm, setShowAddProductForm] = useState(false);
   const [showEditProductForm, setShowEditProductForm] = useState(false);
   const [product, setProduct] = useState({ name: "", price: "" });
-  const [updateProduct, setUpdateProduct] = useState({ id: '', name: "", price: "" });
+  const [updateProduct, setUpdateProduct] = useState({
+    id: "",
+    name: "",
+    price: "",
+  });
+  const [error, setError] = useState(null);
+
+  const fetchAllProducts = async () => {
+    try {
+      const response = await getAllProducts();
+      setProducts(response);
+    } catch (error) {
+      setError(error);
+      setTimeout(() => setError(null), 2000)
+    }
+  };
+
+  useEffect(() => {
+    // fetch("http://localhost:3000/products", {
+    //   method: "GET",
+    // })// Response object
+    //   .then((response) => response.json())
+    //   .then((data) => setProducts(data))
+    //   .catch((error) => console.error(error));
+    // axiosObj
+    //   .get("/products", { headers: {
+    //     "x-api-key": 'some secure token'
+    //   }})
+    //   .then((response) => {
+    //     console.log(response);
+    //     setProducts(response.data);
+    //   })
+    //   .catch((error) => console.error(error));
+
+    fetchAllProducts();
+  }, []);
 
   const handleChange = (e) => {
     const updatedProduct = { ...product, [e.target.id]: e.target.value };
     setProduct(updatedProduct);
   };
 
-  const handleProductAdd = (e) => {
+  const handleProductAdd = async (e) => {
     e.preventDefault();
-    const newProduct = { ...product, id: products.length + 1 };
-    const updatedProducts = [...products, newProduct];
-    setProducts(updatedProducts);
-    setProduct({ name: "", price: "" });
+    const newProduct = { ...product };
+    try {
+      await createProduct(newProduct);
+      await fetchAllProducts();
+      // const updatedProducts = [...products, response];
+      // setProducts(updatedProducts);
+      setProduct({ name: "", price: "" });
+    } catch (error) {
+      console.error(`Error!`, error);
+    }
   };
 
-  const onDelete = (id) => {
-    const updatedProducts = products.filter(product => product.id !== id);
-    setProducts(updatedProducts);
-  }
+  const onDelete = async (id) => {
+    await deleteProduct(id);
+    await fetchAllProducts();
+    // const updatedProducts = products.filter((product) => product.id !== id);
+    // setProducts(updatedProducts);
+  };
 
-  const onEdit = (id) => {
-    const editProduct = products.find((product) => product.id === id);
+  const onEdit = async (id) => {
+    const editProduct = await getProductById(id);
+    // const editProduct = products.find((product) => product.id === id);
     setUpdateProduct(editProduct);
     setShowEditProductForm(true);
-  }
+  };
 
   const handleUChange = (e) => {
-    const updatedProduct = { ...updateProduct, [e.target.name]: e.target.value };
+    const updatedProduct = {
+      ...updateProduct,
+      [e.target.name]: e.target.value,
+    };
     setUpdateProduct(updatedProduct);
-  }
+  };
 
-  const handleProductEdit = (e) => {
+  const handleProductEdit = async (e) => {
     e.preventDefault();
     const newProduct = { ...updateProduct };
-    const productIndex = products.findIndex(product => product.id === newProduct.id);
-    products.splice(productIndex, 1, newProduct);
-    setProducts(products);
-    setUpdateProduct({ id: '', name: "", price: "" });
+    await modifyProduct(newProduct);
+    await fetchAllProducts();
+    // const productIndex = products.findIndex(
+    //   (product) => product.id === newProduct.id
+    // );
+    // products.splice(productIndex, 1, newProduct);
+    // setProducts(products);
+    setUpdateProduct({ id: "", name: "", price: "" });
     setShowEditProductForm(false);
   };
 
@@ -59,6 +120,9 @@ export const ProductList = () => {
 
   return (
     <div className="products-page">
+      {error ? <div className="alert alert-danger">
+        <p>{error.message}</p>
+      </div> : null}
       <div>
         <button
           onClick={() => setShowAddProductForm(!showAddProductForm)}

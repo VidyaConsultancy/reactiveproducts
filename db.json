@@ -1,0 +1,10 @@
+{
+  "users": [],
+  "products": [
+    {
+      "name": "MacBook Air",
+      "price": "99.99",
+      "id": 1
+    }
+  ]
+}
