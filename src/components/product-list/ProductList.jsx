@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import axios from 'axios';
 import { ProductItem } from "../product-item/ProductItem";
 import {
@@ -6,7 +6,9 @@ import {
   deleteProduct,
 } from "../../services/products";
 import "./ProductList.css";
-import { Link } from "react-router-dom";
+import { Link/* , Routes, Route */ } from "react-router-dom";
+// import { ProductAdd } from "../product-add/ProductAdd";
+// import { ProductEdit } from "../product-edit/ProductEdit";
 
 // const axiosObj = axios.create({
 //   baseURL: "http://localhost:3000",
@@ -62,16 +64,17 @@ export const ProductList = () => {
 
   return (
     <div className="products-page">
+      {/* <Routes>
+        <Route path="add" element={<ProductAdd />} />
+        <Route path="edit/:id" element={<ProductEdit />} />
+      </Routes> */}
       {errorMsg ? (
         <div className="alert alert-danger">
           <p>{errorMsg.message}</p>
         </div>
       ) : null}
       <div>
-        <Link
-          to="/products/add"
-          className="btn btn-warn"
-        >
+        <Link to="add" className="btn btn-warn">
           Add Product
         </Link>
       </div>

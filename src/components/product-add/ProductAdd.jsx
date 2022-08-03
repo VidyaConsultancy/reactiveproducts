@@ -1,7 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import { createProduct } from "../../services/products";
 
 export const ProductAdd = () => {
+  const navigate = useNavigate();
   const [product, setProduct] = useState({ name: "", price: "" });
 
   const handleChange = (e) => {
@@ -15,6 +17,7 @@ export const ProductAdd = () => {
     try {
       await createProduct(newProduct);
       setProduct({ name: "", price: "" });
+      navigate('/products');
     } catch (error) {
       console.error(`Error!`, error);
     }

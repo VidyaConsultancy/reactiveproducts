@@ -1,7 +1,12 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { modifyProduct, getProductById } from "../../services/products";
 
 export const ProductEdit = () => {
+  const navigate = useNavigate();
+  const params = useParams();
+  const { id: productId } = params;
+
   const [product, setProduct] = useState({
     id: "",
     name: "",
@@ -21,8 +26,15 @@ export const ProductEdit = () => {
     const newProduct = { ...product };
     await modifyProduct(newProduct);
     setProduct({ id: "", name: "", price: "" });
+    navigate("/products");
   };
-  
+
+  useEffect(() => {
+    getProductById(productId)
+      .then(data => setProduct(data))
+      .catch(error => console.log(error))
+  }, [productId])
+
   return (
     <form action="" className="column-form" onSubmit={handleProductEdit}>
       <div className="form-group">

@@ -10,6 +10,16 @@
       "name": "Acer",
       "price": "99.99",
       "id": 2
+    },
+    {
+      "name": "Asus Gamer",
+      "price": "129.99",
+      "id": 3
+    },
+    {
+      "name": "Dell Vista",
+      "price": "89.99",
+      "id": 4
     }
   ]
 }
