@@ -1,5 +1,11 @@
 {
-  "users": [],
+  "users": [
+    {
+      "email": "johndoe001@mailinator.com",
+      "password": "$2a$10$7/nOMu9MEACn9ib0/ULNVuXoEWlDGJjM/XCJUJSneot/GDmRN5f8e",
+      "id": 1
+    }
+  ],
   "products": [
     {
       "name": "MacBook Air",

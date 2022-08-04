@@ -86,3 +86,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.column-form {
+  display: grid;
+  gap: 20px;
+}
+
+.content {
+  display: grid;
+  grid-template-rows: 55px 1fr 50px;
+  min-height: 100vh;
+}
+
+.main {
+  padding: 2em;
+}
