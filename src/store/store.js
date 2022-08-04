@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import { authReducer } from "./auth.slice";
 /* 
-import { createStore, combineReducer } from "react-redux";
+import { createStore, combineReducer, applyMiddleware } from "react-redux";
 import { authReducer } from "./auth/auth.reducer";
 import { userReducer } from "./user/user.reducer";
 import { productReducer } from "./product/product.reducer";

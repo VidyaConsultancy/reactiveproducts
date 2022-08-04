@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouterNavigate } from "../../hooks/useRouterNavigate";
-import { signin } from "../../services/auth";
-import { loginStart, loginSuccess } from "../../store/auth.slice";
+import { asyncLogin } from "../../store/auth.slice";
 
 export const Signin = () => {
   const dispatch = useDispatch();
@@ -19,16 +18,14 @@ export const Signin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      dispatch(loginStart());
-      const res = await signin(user);
-      dispatch(loginSuccess(res))
-      localStorage.setItem("accessToken", res.accessToken);
-      navigate("/products");
-    } catch (error) {
-      console.log(error);
-    }
+    dispatch(asyncLogin(user));
   };
+  
+  useEffect(() => {
+    if(authState.accessToken) {
+      navigate("/products");
+    }
+  }, [navigate, authState.accessToken])
 
   return (
     <div className="container">
